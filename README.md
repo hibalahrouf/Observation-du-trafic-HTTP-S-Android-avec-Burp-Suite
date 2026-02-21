@@ -254,7 +254,7 @@ User-Agent: Mozilla/5.0 (Linux; Android 10; K) Chrome/133...
 
 Corps de la requête :
 
-```json
+
 {
   "email": "lahrouf@gmail.com",
   "password": "hiba"
