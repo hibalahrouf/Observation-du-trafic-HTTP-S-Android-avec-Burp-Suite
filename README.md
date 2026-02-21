@@ -90,9 +90,9 @@ Méthode : GET
 
 Statut : 200 OK
 
-Protocole : HTTPS
+Protocole : HTTP/1.1
 
-Taille de réponse : 777 bytes
+
 
 Cela confirme que le trafic transite correctement par le proxy.
 
@@ -114,15 +114,40 @@ Méthode HTTP : GET
 
 Chemin : /
 
-En-tête Host
+En-têtes importants
 
-User-Agent (identifie Android + version Chrome)
+Exemples observés :
 
-En-têtes Accept
+User-Agent
+Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 ...
 
-Encodage accepté
+➡️ Indique :
 
-Ces informations révèlent le contexte client et les capacités du navigateur.
+OS : Android 10
+
+Navigateur : Chrome Mobile
+
+Type d’appareil : Mobile
+
+Accept
+text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,...
+
+ Types de contenus acceptés par le client.
+
+Accept-Encoding
+gzip, deflate, br
+
+ Compression supportée.
+
+Sec-Fetch-* headers
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+
+ Indiquent qu’il s’agit d’une navigation principale vers un document.
+
+
 
 ## Analyse de la réponse serveur
 
