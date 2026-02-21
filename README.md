@@ -121,7 +121,7 @@ Exemples observés :
 User-Agent
 Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 ...
 
-➡️ Indique :
+ Indique :
 
 OS : Android 10
 
@@ -200,36 +200,114 @@ L’interception a ensuite été désactivée pour éviter toute perturbation.
 ![Burp Dashboard](images/18.png)
 
 ## Analyse des risques
-![Burp Dashboard](images/19.png)
 
-Dans ce test :
 
-Aucun cookie de session détecté
+## Périmètre
+
+Test réalisé dans un environnement contrôlé et autorisé :
+
+- Android Emulator (environnement de laboratoire isolé)
+- Burp Suite configuré sur la machine hôte
+- Cible autorisée : https://demo.owasp-juice.shop
+- Aucun compte personnel réel utilisé
+- Observation uniquement (aucune modification des requêtes)
+
+---
+
+## Configuration technique
+
+- **Outil** : Burp Suite Community Edition v2026.1.3  
+- **IP machine hôte** : 192.168.1.17  
+- **Port proxy** : 8080  
+- **Configuration proxy Android** :  
+  - Proxy hostname : 10.0.2.2  
+  - Proxy port : 8080  
+- **Mode Intercept** : OFF (utilisé uniquement pour démonstration)
+- **Date / Heure du test** : 17/02/2026 — 11:48  
+
+---
+
+## Preuves
+
+![Burp Dashboard](images/24.png)
+
+Dans l’onglet **HTTP history**, les requêtes suivantes sont observées :
+
+- `GET /`
+- `POST /rest/user/login`
+
+La présence de ces requêtes confirme que le trafic transite bien par le proxy Burp.
+
+---
+
+
+Requête analysée :
+
+---
+POST /rest/user/login HTTP/1.1
+Host: demo.owasp-juice.shop
+Content-Type: application/json
+Origin: https://demo.owasp-juice.shop
+
+User-Agent: Mozilla/5.0 (Linux; Android 10; K) Chrome/133...
+
+
+Corps de la requête :
+
+```json
+{
+  "email": "lahrouf@gmail.com",
+  "password": "hiba"
+}
+
+Réponse serveur observée :
+
+HTTP/1.1 401 Unauthorized
+Invalid email or password.
+----
+
+## Analyse
+🔎 Données observées
+
+Identifiants transmis dans le corps JSON
 
 Aucun paramètre sensible dans l’URL
 
-Utilisation correcte de HTTPS
+Communication via HTTPS (TLS actif)
 
-Risques potentiels dans d’autres applications :
+Aucun cookie de session émis lors d’un échec d’authentification
 
-Tokens transmis en URL
+## Risques potentiels (scénario théorique)
 
-Cookies sans attribut Secure ou HttpOnly
+Si HTTP était utilisé → interception possible des identifiants
 
-Absence d’en-têtes de sécurité
+Exposition du mot de passe sur un réseau non sécurisé
+
+Présence potentielle d’un token JWT après authentification réussie
+
+Mauvaise configuration possible des cookies (absence de Secure / HttpOnly)
+
+---
 
 ## Recommandations défensives
 
-Imposer HTTPS
+Forcer HTTPS pour toutes les communications
 
-Éviter les données sensibles en URL
+Implémenter HSTS
 
-Configurer correctement les cookies (Secure, HttpOnly, SameSite)
+Ne jamais transmettre d’identifiants via HTTP
 
-Minimiser les données côté client
+Sécuriser les cookies avec :
 
-Retirer le certificat de laboratoire après test
+Secure
 
+HttpOnly
+
+SameSite
+
+Implémenter le certificate pinning côté Android
+
+Minimiser les données envoyées au client
 ## Nettoyage
 ![Burp Dashboard](images/20.png)
 ![Burp Dashboard](images/21.png)
