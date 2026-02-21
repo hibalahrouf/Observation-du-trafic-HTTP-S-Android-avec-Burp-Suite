@@ -229,7 +229,7 @@ Test réalisé dans un environnement contrôlé et autorisé :
 
 ## Preuves
 
-![Burp Dashboard](images/24.png)
+![Burp Dashboard](images/23.png)
 
 Dans l’onglet **HTTP history**, les requêtes suivantes sont observées :
 
